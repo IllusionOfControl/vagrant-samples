@@ -1,0 +1,37 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "database" do |db|
+    db.vm.box = "generic/arch"
+    db.vm.hostname = "db"
+    db.vm.network "private_network", ip: "192.168.69.90"
+
+    db.vm.provider "virtualbox" do |vb|
+      vb.name = "Test machine 3 (DB)"
+      vb.gui = false
+      vb.memory = "512"
+      vb.cpus = 1
+    end
+
+    db.vm.provision "shell", path: "scripts/install_db.sh"
+  end
+
+  config.vm.define "web" do |web|
+    web.vm.box = "generic/arch"
+    web.vm.hostname = "web"
+    web.vm.network "private_network", ip:"192.168.69.91"
+
+    web.vm.provider "virtualbox" do |vb|
+      vb.name = "Test machine 3 (Web)"
+      vb.gui = false
+      vb.memory = "512"
+      vb.cpus = 1
+    end
+
+    web.vm.provision "shell", path: "scripts/install_web.sh"
+  end
+
+  config.vm.provision "shell", path: "scripts/setting_hosts.sh"
+  #config.vm.provision "shell", path: "scripts/install_tmux.sh"
+  config.vm.provision "shell",
+    run: "always",
+    inline: "ip route add default via 192.168.69.1"
+end

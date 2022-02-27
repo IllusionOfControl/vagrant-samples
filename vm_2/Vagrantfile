@@ -1,0 +1,19 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "generic/arch"
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "Test machine 2"
+    vb.gui = false
+    vb.memory = "512"
+    vb.cpus = 1
+  end
+
+  config.vm.hostname = "pascal"
+  # second interface
+  config.vm.network "private_network", ip: "192.168.69.100"
+
+  config.vm.provision "shell", "inline": <<-SHELL
+    pacman -Sy --noconfirm
+    pacman -S screenfetch --noconfirm
+    pacman -S htop vim --noconfirm
+  SHELL
+end

@@ -1,0 +1,10 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "Test machine 1"
+    vb.gui = false
+    vb.memory = "512"
+  end
+
+  config.vm.provision "shell", "inline" => "sudo apt-get -q -y install redis-server nginx"
+end
